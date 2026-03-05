@@ -1,0 +1,39 @@
+# Virtual environment
+mlenv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Model weights (too large for GitHub)
+*.pt
+*.pth
+checkpoints/
+
+# Data files (too large for GitHub)
+data/midi/
+data/audio/
+*.mid
+*.midi
+*.mp3
+*.wav
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env
