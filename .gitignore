@@ -37,3 +37,9 @@ logs/
 
 # Environment variables
 .env
+
+# Preprocessed data files (too large for GitHub)
+data/inputs.npy
+data/targets.npy
+data/note_to_int.pkl
+data/int_to_note.pkl
