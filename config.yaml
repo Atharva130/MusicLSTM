@@ -1,0 +1,56 @@
+# ── Data ──────────────────────────────────────────────
+data:
+  midi_dir: "data/midi"
+  audio_dir: "data/audio"
+  composers:
+    - "bach"
+    - "beethoven"
+    - "chopin"
+  sequence_length: 64
+  test_split: 0.1
+
+# ── Model ─────────────────────────────────────────────
+model:
+  embedding_dim: 64
+  hidden_size: 512
+  num_layers: 2
+  dropout: 0.3
+  use_attention: true
+
+# ── Training ──────────────────────────────────────────
+training:
+  batch_size: 64
+  epochs: 50
+  learning_rate: 0.001
+  clip_grad_norm: 5.0
+  save_every: 5
+  device: "cuda"
+
+# ── Generation ────────────────────────────────────────
+generation:
+  temperature: 1.0
+  max_length: 200
+  seed_length: 10
+
+# ── Mood Profiles ─────────────────────────────────────
+moods:
+  sad:
+    key: "minor"
+    tempo: 65
+    composer: "chopin"
+  romantic:
+    key: "major"
+    tempo: 75
+    composer: "beethoven"
+  calm:
+    key: "major"
+    tempo: 70
+    composer: "bach"
+  energetic:
+    key: "major"
+    tempo: 130
+    composer: "beethoven"
+  dark:
+    key: "minor"
+    tempo: 90
+    composer: "bach"
