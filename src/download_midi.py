@@ -26,5 +26,27 @@ def download_bach():
     print(f"\n✅ Bach: {count} files downloaded")
 
 
+def download_beethoven():
+    """
+    music21 has some Beethoven built in.
+    We copy whatever it has into data/midi/beethoven/
+    """
+    output_dir = Path("data/midi/beethoven")
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    beethoven_paths = corpus.getComposer('beethoven')
+
+    count = 0
+    for path in beethoven_paths:
+        if str(path).endswith(('.mid', '.midi', '.xml', '.mxl')):
+            dest = output_dir / Path(path).name
+            shutil.copy(str(path), str(dest))
+            count += 1
+            print(f"Copied: {Path(path).name}")
+
+    print(f"\n✅ Beethoven: {count} files downloaded")
+
+
 if __name__ == "__main__":
     download_bach()
+    download_beethoven()
