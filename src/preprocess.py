@@ -1,5 +1,3 @@
-# src/preprocess.py
-
 import pickle
 from pathlib import Path
 from music21 import corpus, converter, note, chord, stream
@@ -7,9 +5,6 @@ import numpy as np
 from tqdm import tqdm
 from data_loader import get_midi_files, load_config
 
-# ─────────────────────────────────────────────────────
-# JOB 1 — Read one MIDI file and extract notes
-# ─────────────────────────────────────────────────────
 def extract_notes_from_file(file_path):
     """
     Opens one MIDI/MXL file and extracts all notes.
@@ -30,13 +25,9 @@ def extract_notes_from_file(file_path):
 
         for element in all_notes:
             if isinstance(element, note.Note):
-                # Single note → just take its name
-                # e.g. "C4", "E5", "G3"
                 notes.append(str(element.pitch))
 
             elif isinstance(element, chord.Chord):
-                # Chord = multiple notes at once
-                # We take the LOWEST note to keep it simple
                 notes.append(str(element.pitches[0]))
 
     except Exception as e:
@@ -45,9 +36,6 @@ def extract_notes_from_file(file_path):
     return notes
 
 
-# ─────────────────────────────────────────────────────
-# JOB 2 — Extract notes from ALL files
-# ─────────────────────────────────────────────────────
 def extract_all_notes(composer=None):
     """
     Loops through every MIDI file and extracts notes.
@@ -66,18 +54,8 @@ def extract_all_notes(composer=None):
     return all_notes
 
 
-# ─────────────────────────────────────────────────────
-# JOB 3 — Build vocabulary
-# ─────────────────────────────────────────────────────
 def build_vocabulary(all_notes):
-    """
-    Finds every UNIQUE note and assigns it a number.
     
-    Example:
-    notes = ["C4", "E4", "G4", "C4", "E4"]
-    unique = ["C4", "E4", "G4"]
-    vocab  = {"C4": 0, "E4": 1, "G4": 2}
-    """
     # set() removes duplicates
     unique_notes = sorted(set(all_notes))
     vocab_size = len(unique_notes)
@@ -92,22 +70,8 @@ def build_vocabulary(all_notes):
     return note_to_int, int_to_note, vocab_size
 
 
-# ─────────────────────────────────────────────────────
-# JOB 4 — Create sequences for LSTM
-# ─────────────────────────────────────────────────────
 def create_sequences(all_notes, note_to_int, sequence_length=64):
-    """
-    Converts notes to numbers, then creates input/output pairs.
     
-    Example with sequence_length=4 (we use 64 in real training):
-    notes:   [C4, E4, G4, B4, A4, F4]
-    numbers: [0,  1,  2,  3,  4,  5 ]
-    
-    Input sequence 1: [0, 1, 2, 3] → Target: 4
-    Input sequence 2: [1, 2, 3, 4] → Target: 5
-    
-    This is called a SLIDING WINDOW
-    """
     # Convert all notes to numbers
     all_ints = [note_to_int[n] for n in all_notes]
 
@@ -135,16 +99,8 @@ def create_sequences(all_notes, note_to_int, sequence_length=64):
     return inputs, targets
 
 
-# ─────────────────────────────────────────────────────
-# JOB 5 — Save everything to disk
-# ─────────────────────────────────────────────────────
 def save_preprocessed_data(inputs, targets, note_to_int, int_to_note):
-    """
-    Saves our processed data so we don't have to 
-    reprocess every time we train.
     
-    pickle = Python's way of saving any object to a file
-    """
     save_dir = Path("data")
     save_dir.mkdir(exist_ok=True)
 
@@ -161,9 +117,6 @@ def save_preprocessed_data(inputs, targets, note_to_int, int_to_note):
     print("✅ Saved: note_to_int.pkl, int_to_note.pkl")
 
 
-# ─────────────────────────────────────────────────────
-# RUN EVERYTHING
-# ─────────────────────────────────────────────────────
 if __name__ == "__main__":
     config = load_config()
     sequence_length = config["data"]["sequence_length"]

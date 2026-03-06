@@ -4,10 +4,7 @@ import shutil
 from pathlib import Path
 
 def download_bach():
-    """
-    music21 has Bach built in -- no internet needed!
-    We just copy them into our data/midi/bach/ folder.
-    """
+    
     output_dir = Path("data/midi/bach")
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -27,10 +24,7 @@ def download_bach():
 
 
 def download_beethoven():
-    """
-    music21 has some Beethoven built in.
-    We copy whatever it has into data/midi/beethoven/
-    """
+    
     output_dir = Path("data/midi/beethoven")
     output_dir.mkdir(parents=True, exist_ok=True)
 
