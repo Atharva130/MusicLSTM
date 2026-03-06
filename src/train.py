@@ -31,7 +31,7 @@ def load_data():
     return inputs, targets, vocab_size
 
 
-def train():
+def train(resume_from=None):
     with open("config.yaml", "r") as f:
         config = yaml.safe_load(f)
     t = config["training"]
@@ -40,22 +40,35 @@ def train():
     print(f"Training on: {device}")
 
     inputs, targets, vocab_size = load_data()
-    print(f"Sequences: {len(inputs)} | Vocab: {vocab_size}")
-
     dataset    = MusicDataset(inputs, targets)
     dataloader = DataLoader(dataset, batch_size=t["batch_size"], shuffle=True)
 
     model     = build_model(vocab_size).to(device)
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=t["learning_rate"])
+
+    # Resume from checkpoint if given
+    if resume_from:
+        model.load_state_dict(torch.load(resume_from, map_location=device))
+        print(f"✅ Resumed from: {resume_from}")
+
+    # Lower learning rate for fine tuning
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+
+    # Reduces LR by 50% when loss stops improving for 3 epochs
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, 
+        mode     = "min",
+        factor   = 0.5,
+        patience = 3
+    )
 
     Path("checkpoints").mkdir(exist_ok=True)
 
-    for epoch in range(1, t["epochs"] + 1):
+    for epoch in range(1, 51):
         model.train()
         total_loss = 0
 
-        for inputs_batch, targets_batch in tqdm(dataloader, desc=f"Epoch {epoch}/{t['epochs']}"):
+        for inputs_batch, targets_batch in tqdm(dataloader, desc=f"Epoch {epoch}/50"):
             inputs_batch  = inputs_batch.to(device)
             targets_batch = targets_batch.to(device)
 
@@ -66,19 +79,23 @@ def train():
 
             torch.nn.utils.clip_grad_norm_(model.parameters(), t["clip_grad_norm"])
             optimizer.step()
-
             total_loss += loss.item()
 
         avg_loss = total_loss / len(dataloader)
         print(f"Epoch {epoch} | Loss: {avg_loss:.4f}")
+        scheduler.step(avg_loss)
 
-        if epoch % t["save_every"] == 0:
-            path = f"checkpoints/model_epoch_{epoch}.pt"
+        if epoch % 10 == 0:
+            path = f"checkpoints/finetune_epoch_{epoch}.pt"
             torch.save(model.state_dict(), path)
             print(f"✅ Saved: {path}")
 
     torch.save(model.state_dict(), "checkpoints/model_final.pt")
-    print("\n🎵 Training complete! Final model saved.")
+    print("\n🎵 Fine tuning complete!")
+
+
+if __name__ == "__main__":
+    train(resume_from="checkpoints/finetune_epoch_20.pt")
 
 
 if __name__ == "__main__":

@@ -40,7 +40,20 @@ def download_beethoven():
 
     print(f"\n✅ Beethoven: {count} files downloaded")
 
+def download_chopin():
+    output_dir = Path("data/midi/chopin")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    chopin_paths = corpus.getComposer('chopin')
+    count = 0
+    for path in chopin_paths:
+        if str(path).endswith(('.mid', '.midi', '.xml', '.mxl')):
+            dest = output_dir / Path(path).name
+            shutil.copy(str(path), str(dest))
+            count += 1
+            print(f"Copied: {Path(path).name}")
+    print(f"\n✅ Chopin: {count} files downloaded")
 
 if __name__ == "__main__":
     download_bach()
     download_beethoven()
+    download_chopin()
