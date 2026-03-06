@@ -43,3 +43,10 @@ data/inputs.npy
 data/targets.npy
 data/note_to_int.pkl
 data/int_to_note.pkl
+
+# Comparison charts
+ablation_comparison.png
+src/plot_comparison.py
+
+chart_curves.png
+chart_bars.png
