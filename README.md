@@ -2,11 +2,12 @@
 
 > A 2-layer stacked LSTM with Bahdanau Attention trained on 501 classical MIDI files from Bach, Beethoven & Chopin. Select a mood → generate an original piano composition → download as audio.
 
-![Python](https://img.shields.io/badge/Python-3.12-blue?style=flat-square)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.x-ee4c2c?style=flat-square)
-![Gradio](https://img.shields.io/badge/Gradio-6.x-orange?style=flat-square)
-
 ---
+
+<img width="1918" height="868" alt="Screenshot 2026-03-07 234405" src="https://github.com/user-attachments/assets/134dde77-8b18-432a-99b2-33e94160829d" />
+
+<img width="1919" height="875" alt="Screenshot 2026-03-07 234433" src="https://github.com/user-attachments/assets/353925e4-10b5-4b13-90ea-4a1f95435953" />
+
 
 ## 🎯 What It Does
 
