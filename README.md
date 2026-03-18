@@ -63,7 +63,7 @@ Softmax + Temperature Sampling
         ↓
 Generated Token Sequence
 ```
-
+<img width="3817" height="1612" alt="MusicLSTM Architecture" src="https://github.com/user-attachments/assets/f3f435d2-209b-4230-bb07-9304e1abb04d" />
 **Total Parameters**
 
 ```
